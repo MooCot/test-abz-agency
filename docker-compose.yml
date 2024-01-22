@@ -1,0 +1,71 @@
+version: "3.7"
+
+services:
+  app:
+    build:
+      args:
+        user: sammy
+        uid: 1000
+      context: ./
+      dockerfile: Dockerfile
+    image: geo
+    container_name: geo-app
+    restart: unless-stopped
+    working_dir: /var/www/
+    volumes:
+      - ./:/var/www
+    networks:
+      - app
+
+  mysql:
+    image: mysql:5.7
+    container_name: mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: ${DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+      MYSQL_PASSWORD: ${DB_PASSWORD}
+      MYSQL_USER: ${DB_USERNAME}
+      SERVICE_TAGS: dev
+      SERVICE_NAME: mysql
+    networks:
+      - app
+
+  phpmyadmin:
+    image: phpmyadmin
+    restart: always
+    ports:
+      - 8090:80
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOST=mysql
+      - PMA_PORT=3306
+    depends_on:
+      - mysql
+  nginx:
+    image: nginx:alpine
+    container_name: geo-nginx
+    restart: unless-stopped
+    ports:
+      - 80:80
+    volumes:
+      - ./:/var/www
+      - ./docker-compose/nginx:/etc/nginx/conf.d/
+    networks:
+      - app
+      
+  redis:
+    image: redis
+    container_name: redis
+    command: ["redis-server", "--appendonly", "yes", "--requirepass","ak123456"]
+    restart: always
+    ports:
+      - 6379:6379
+
+volumes:
+  postgres_data:
+  pgadmin-data:
+
+networks:
+  app:
+    driver: bridge
