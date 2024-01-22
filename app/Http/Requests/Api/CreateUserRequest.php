@@ -29,6 +29,7 @@ class CreateUserRequest extends ApiFormRequest
             'phone' => ['required', 'string'],
             'name' => ['required', 'string'],
             'positions_id' => ['required', 'numeric'],
+            // 'photo' => ['required', 'image', "mimes:jpeg,jpg", "max:5242880"],
         ];
     }
 

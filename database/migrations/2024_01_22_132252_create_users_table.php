@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('phone')->unique();
             $table->string('password');
+            $table->string('photo');
             $table->rememberToken();
             $table->foreignId('positions_id')->nullable()->constrained('positions')->onDelete('cascade');
             $table->timestamps();

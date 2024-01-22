@@ -54,12 +54,14 @@ class UserController extends Controller
     public function create(CreateUserRequest $request)
     {
         try {
+            $path = $request->file('photo')->store('photos', 'public');
             $user = new User();
             $user->name = $request->name;
             $user->email = $request->email;
             $user->phone = $request->phone;
-            $user->name = $request->name;
+            $user->password = $request->password;
             $user->positions_id = $request->positions_id;
+            $user->photo = $path;
             $user->save();
             return response()->json(['success' => true]);
         } catch (\Exception $e) {
