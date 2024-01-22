@@ -41,4 +41,14 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    /**
+     * Undocumented function
+     *
+     * @return void
+     */
+    public function position()
+    {
+        return $this->belongsTo(Position::class);
+    }
 }
