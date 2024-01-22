@@ -17,7 +17,7 @@ services:
     networks:
       - app
 
-  mysql:
+  db:
     image: mysql:5.7
     container_name: mysql
     restart: unless-stopped
@@ -28,20 +28,27 @@ services:
       MYSQL_USER: ${DB_USERNAME}
       SERVICE_TAGS: dev
       SERVICE_NAME: mysql
+    ports:
+      - "6033:3306"
+    volumes:
+      - dbdata:/var/lib/mysql
     networks:
       - app
 
   phpmyadmin:
-    image: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    container_name: pma
+    links:
+      - db
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_ARBITRARY: 1
     restart: always
     ports:
-      - 8090:80
-    environment:
-      - PMA_ARBITRARY=1
-      - PMA_HOST=mysql
-      - PMA_PORT=3306
-    depends_on:
-      - mysql
+      - 8081:80
+    networks:
+      - app
   nginx:
     image: nginx:alpine
     container_name: geo-nginx
@@ -53,18 +60,9 @@ services:
       - ./docker-compose/nginx:/etc/nginx/conf.d/
     networks:
       - app
-      
-  redis:
-    image: redis
-    container_name: redis
-    command: ["redis-server", "--appendonly", "yes", "--requirepass","ak123456"]
-    restart: always
-    ports:
-      - 6379:6379
 
 volumes:
-  postgres_data:
-  pgadmin-data:
+  dbdata:
 
 networks:
   app:
