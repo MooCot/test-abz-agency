@@ -20,3 +20,4 @@ Route::get('user', [UserController::class, 'index']);
 Route::post('user', [UserController::class, 'create']);
 Route::get('/user/{id}', [UserController::class, 'show']);
 Route::get('/positions', [PositionController::class, 'index']);
+Route::get('/tokens', [UserController::class, 'token']);

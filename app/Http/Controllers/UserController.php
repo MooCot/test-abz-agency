@@ -9,6 +9,8 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
+use Laravel\Sanctum\PersonalAccessToken;
 
 class UserController extends Controller
 {
@@ -100,6 +102,22 @@ class UserController extends Controller
                 'success' => false,
                 'errors' => $e->validator->errors(),
             ], 400);
+        }
+    }
+
+    public function token(Request $request)
+    {
+        try {
+            $abilities = ['expires_in' => 40];
+            $toketnString = hash('sha256', Str::random(60));
+            $token = PersonalAccessToken::create([
+                'name' => 'custom-token-name',
+                'token' => $toketnString,
+                'abilities' => $abilities,
+            ]);
+            return response()->json(['success' => true, 'token' => $toketnString ]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
         }
     }
 }
