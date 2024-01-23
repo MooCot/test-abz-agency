@@ -58,11 +58,10 @@ class UserController extends Controller
             $kay = config('app.api_tinify', 'Kay');
             \Tinify\setKey("$kay");
 
-
             $path = $request->file('photo')->store('photos', 'public');
             $fullFilePath = Storage::path('public/' . $path);
             $source = \Tinify\fromFile($fullFilePath);
-            $source2 = $source->toFile($fullFilePath);
+            $source->toFile($fullFilePath);
             $user = new User();
             $user->name = $request->name;
             $user->email = $request->email;
@@ -71,11 +70,13 @@ class UserController extends Controller
             $user->positions_id = $request->positions_id;
             $user->photo = $path;
             $user->save();
-            return response()->json(['success' => true]);
+            return response()->json([
+                'success' => true,
+                'user_id' => $user->id,
+                "message" => "New user successfully registered"]);
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
-        return response()->json(['success' => $source2]);
     }
 
     public function show(Request $request)
