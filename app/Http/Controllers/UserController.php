@@ -8,6 +8,7 @@ use App\Http\Requests\Api\CreateUserRequest;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
@@ -54,7 +55,14 @@ class UserController extends Controller
     public function create(CreateUserRequest $request)
     {
         try {
+            $kay = config('app.api_tinify', 'Kay');
+            \Tinify\setKey("$kay");
+
+
             $path = $request->file('photo')->store('photos', 'public');
+            $fullFilePath = Storage::path('public/' . $path);
+            $source = \Tinify\fromFile($fullFilePath);
+            $source2 = $source->toFile($fullFilePath);
             $user = new User();
             $user->name = $request->name;
             $user->email = $request->email;
@@ -67,6 +75,7 @@ class UserController extends Controller
         } catch (\Exception $e) {
             return response()->json(['error' => $e->getMessage()], 500);
         }
+        return response()->json(['success' => $source2]);
     }
 
     public function show(Request $request)

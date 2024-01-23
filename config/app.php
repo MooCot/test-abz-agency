@@ -4,6 +4,12 @@ use Illuminate\Support\Facades\Facade;
 
 return [
 
+    /**
+     * 
+     */
+
+    'api_tinify' => env('API_TINIFY', 'Kay'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Name
