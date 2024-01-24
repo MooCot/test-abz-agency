@@ -19,7 +19,9 @@ class PositionController extends Controller
             if ($users->isEmpty()) {
                 throw new \Exception("Positions not found");
             }
-            return response()->json(['users' => $users]);
+            return response()->json([
+                'success' => true,
+                'users' => $users]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,

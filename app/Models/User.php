@@ -6,6 +6,8 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class User extends Authenticatable
 {
@@ -20,6 +22,9 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'phone',
+        'positions_id',
+        'photo',
     ];
 
     /**
@@ -41,12 +46,19 @@ class User extends Authenticatable
     ];
 
     /**
-     * Undocumented function
-     *
-     * @return void
+     * Get the phone associated with the user.
      */
-    public function position()
+    public function position(): HasOne
     {
-        return $this->belongsTo(Position::class);
+        return $this->hasOne(Position::class, 'id');
+    }
+
+    public static function copressImg($fullFilePath)
+    {
+        $kay = config('app.api_tinify', 'Kay');
+        \Tinify\setKey("$kay");
+
+        $source = \Tinify\fromFile($fullFilePath);
+        $source->toFile($fullFilePath);
     }
 }

@@ -10,7 +10,9 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
-use Laravel\Sanctum\PersonalAccessToken;
+use App\Models\PersonalAccessToken;
+use Illuminate\Http\JsonResponse;
+use App\Http\Resources\UserResource;
 
 class UserController extends Controller
 {
@@ -39,85 +41,102 @@ class UserController extends Controller
                     "next_url" => $users->nextPageUrl(),
                     "prev_url" => $users->previousPageUrl()
                 ],
-                "users" => $users->items()
+                "users" => UserResource::collection($users->items())
             ]);
         } catch (ValidationException $e) {
             return response()->json([
                 'success' => false,
                 'errors' => $e->validator->errors(),
-            ], 422);
+            ], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
                 'errors' => $e->getMessage(),
-            ], 404);
+            ], JsonResponse::HTTP_NOT_FOUND);
         }
     }
 
     public function create(CreateUserRequest $request)
     {
         try {
-            $kay = config('app.api_tinify', 'Kay');
-            \Tinify\setKey("$kay");
-
+            $token = $request->header('Token');
+            if (PersonalAccessToken::expiresToken($token)) {
+                throw new \Exception("The token expired.", JsonResponse::HTTP_UNAUTHORIZED);
+            }
             $path = $request->file('photo')->store('photos', 'public');
             $fullFilePath = Storage::path('public/' . $path);
-            $source = \Tinify\fromFile($fullFilePath);
-            $source->toFile($fullFilePath);
-            $user = new User();
-            $user->name = $request->name;
-            $user->email = $request->email;
-            $user->phone = $request->phone;
-            $user->password = $request->password;
-            $user->positions_id = $request->positions_id;
-            $user->photo = $path;
-            $user->save();
+
+            $user = User::create([
+                'name' => $request->name,
+                'email' => $request->email,
+                'phone' => $request->phone,
+                'password' => $request->password,
+                'positions_id' => $request->positions_id,
+                'photo' => $fullFilePath,
+            ]);
+
+            User::copressImg($fullFilePath);
+
             return response()->json([
                 'success' => true,
                 'user_id' => $user->id,
                 "message" => "New user successfully registered"]);
         } catch (\Exception $e) {
-            return response()->json(['error' => $e->getMessage()], 500);
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], (int)$e->getCode());
         }
     }
 
     public function show(Request $request)
     {
         try {
-            $validator = Validator::make($request->all(), [
-                'id' => 'required|nameric',
+            $validator = Validator::make(["id" => $request->id], [
+                'id' => 'required|int',
             ]);
             if ($validator->fails()) {
                 throw new ValidationException($validator);
             }
-            $user = User::findOrFail($request->id);
-            return response()->json(['success' => true, "user" => $user]);
+            return response()->json([
+                'success' => true,
+                "user" => new UserResource(User::findOrFail($request->id))]);
         } catch (ModelNotFoundException $e) {
             return response()->json([
                 "success" => false,
                 "message" => "The user with the requested identifier does not exist",
-                $e->getMessage()], 404);
+                $e->getMessage()
+            ], JsonResponse::HTTP_NOT_FOUND);
         } catch (ValidationException $e) {
             return response()->json([
                 'success' => false,
-                'errors' => $e->validator->errors(),
-            ], 400);
+                "message" => "Validation failed",
+                'fails' => $e->validator->errors(),
+            ], JsonResponse::HTTP_BAD_REQUEST);
+        } catch (\Exception $e) {
+            return response()->json([
+                'success' => false,
+                "message" => $e->getMessage(),
+            ], $e->getCode());
         }
     }
 
     public function token(Request $request)
     {
         try {
-            $abilities = ['expires_in' => 40];
             $toketnString = hash('sha256', Str::random(60));
-            $token = PersonalAccessToken::create([
+            PersonalAccessToken::create([
                 'name' => 'custom-token-name',
                 'token' => $toketnString,
-                'abilities' => $abilities,
             ]);
-            return response()->json(['success' => true, 'token' => $toketnString ]);
+            return response()->json([
+            'success' => true,
+            'token' => $toketnString ]);
         } catch (\Exception $e) {
-            return response()->json(['success' => false, 'error' => $e->getMessage()], 500);
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

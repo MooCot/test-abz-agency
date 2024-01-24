@@ -16,11 +16,11 @@ abstract class ApiFormRequest extends FormRequest
         $response = new JsonResponse([
             "success" => false,
             "message" => "Validation failed",
-            "fails" => $validator->errors()], 422);
+            "fails" => $validator->errors()], JsonResponse::HTTP_UNPROCESSABLE_ENTITY);
 
         // Дополнительная проверка для email
         if ($validator->errors()->has('email')) {
-            $response->setStatusCode(409);
+            $response->setStatusCode(JsonResponse::HTTP_CONFLICT);
         }
         throw new ValidationException($validator, $response);
     }
