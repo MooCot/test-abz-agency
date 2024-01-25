@@ -13,6 +13,7 @@ use Illuminate\Support\Str;
 use App\Models\PersonalAccessToken;
 use Illuminate\Http\JsonResponse;
 use App\Http\Resources\UserResource;
+use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
@@ -70,7 +71,7 @@ class UserController extends Controller
                 'name' => $request->name,
                 'email' => $request->email,
                 'phone' => $request->phone,
-                'password' => $request->password,
+                'password' => Hash::make($request->password),
                 'positions_id' => $request->positions_id,
                 'photo' => $fullFilePath,
             ]);

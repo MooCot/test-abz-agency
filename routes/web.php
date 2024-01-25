@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -13,6 +14,7 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/loadMoreUsers', [AdminController::class, 'loadMoreUsers']);
+Route::get('/', [AdminController::class, 'index']);
+Route::get('admin/create', [AdminController::class, 'create'])->name('admin.create');
+Route::post('admin/create', [AdminController::class, 'store'])->name('admin.store');

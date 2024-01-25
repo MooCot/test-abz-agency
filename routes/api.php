@@ -15,9 +15,10 @@ use App\Http\Controllers\PositionController;
 | is assigned the "api" middleware group. Enjoy building your API!
 |
 */
-
-Route::get('/user/{id}', [UserController::class, 'show']);
-Route::get('user', [UserController::class, 'index']);
-Route::post('user', [UserController::class, 'create']);
-Route::get('/positions', [PositionController::class, 'index']);
-Route::get('/tokens', [UserController::class, 'token']);
+Route::prefix('v1')->group(function () {
+    Route::get('/user/{id}', [UserController::class, 'show']);
+    Route::get('user', [UserController::class, 'index']);
+    Route::post('user', [UserController::class, 'create']);
+    Route::get('/positions', [PositionController::class, 'index']);
+    Route::get('/tokens', [UserController::class, 'token']);
+});
