@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Position;
+use Illuminate\Http\JsonResponse;
 
 class PositionController extends Controller
 {
@@ -21,7 +22,7 @@ class PositionController extends Controller
             return response()->json([
                 'success' => false,
                 'errors' => $e->getMessage(),
-            ], 422);
+            ], JsonResponse::HTTP_NOT_FOUND);
         }
     }
 }

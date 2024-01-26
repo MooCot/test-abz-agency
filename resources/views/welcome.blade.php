@@ -64,8 +64,8 @@
                     var row = document.createElement('tr');
                     var idCell = document.createElement('td');
                     var nameCell = document.createElement('td');
-                    var phoneCell = document.createElement('td');
                     var emailCell = document.createElement('td');
+                    var phoneCell = document.createElement('td');
 
                     row.classList.add('table__border-top');
                     idCell.classList.add('table__text-center');
@@ -75,7 +75,6 @@
                     nameCell.textContent = user.name;
                     emailCell.textContent = user.email;
                     phoneCell.textContent = user.phone;
-                    pathCell.textContent = user.path;
 
                     row.appendChild(idCell);
                     row.appendChild(nameCell);

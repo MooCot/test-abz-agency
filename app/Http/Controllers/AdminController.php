@@ -13,8 +13,9 @@ class AdminController extends Controller
 {
     public function index(Request $request)
     {
+        $countUser = 6;
         return view('welcome', [
-            'users' => User::paginate(6),
+            'users' => User::paginate($countUser),
         ]);
     }
 
@@ -50,6 +51,6 @@ class AdminController extends Controller
 
         User::copressImg($fullFilePath);
 
-        return back()->withStatus(__('Server successfully create.'));
+        return back()->withStatus(__('User successfully create.'));
     }
 }

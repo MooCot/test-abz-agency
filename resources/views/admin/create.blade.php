@@ -93,7 +93,6 @@
                                 <label class="form__label-title">photo</label>
                                 <div class="col-sm-7">
                                     <div class="form__input_position form-group{{ $errors->has('photo') ? ' has-danger' : '' }}">
-                                        <label style="margin-right: 40px; margin-left: 20px;" class="col-sm-2 col-form-label">photo</label>
                                         <input class="{{ $errors->has('photo') ? ' is-invalid' : '' }}" name="photo" id="input-photo" type="file" />
                                         @if ($errors->has('photo'))
                                         <span id="photo-error" class="error text-danger" for="input-photo">{{ $errors->first('photo') }}</span>
@@ -105,7 +104,6 @@
                                 <label class="form__label-title">position</label>
                                 <div class="col-sm-7">
                                     <div class="form__input_position form-group{{ $errors->has('position') ? ' has-danger' : '' }}">
-                                        <label style="margin-right: 40px; margin-left: 20px;" class="col-sm-2 col-form-label">photo</label>
                                         <select id="position" name="position">
                                             @foreach($positions as $position)
                                                 <option value="{{ $position['id'] }}">{{ $position['name'] }}</option>
