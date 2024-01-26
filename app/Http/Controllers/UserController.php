@@ -73,7 +73,7 @@ class UserController extends Controller
                 'phone' => $request->phone,
                 'password' => Hash::make($request->password),
                 'positions_id' => $request->positions_id,
-                'photo' => $fullFilePath,
+                'photo' => $path,
             ]);
 
             User::copressImg($fullFilePath);

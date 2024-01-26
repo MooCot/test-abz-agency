@@ -15,6 +15,6 @@ use App\Http\Controllers\AdminController;
 */
 
 Route::get('/loadMoreUsers', [AdminController::class, 'loadMoreUsers']);
-Route::get('/', [AdminController::class, 'index']);
+Route::get('/', [AdminController::class, 'index'])->name('welcome');
 Route::get('admin/create', [AdminController::class, 'create'])->name('admin.create');
 Route::post('admin/create', [AdminController::class, 'store'])->name('admin.store');

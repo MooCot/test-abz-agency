@@ -44,9 +44,12 @@ class AdminController extends Controller
             'email' => $request->email,
             'phone' => $request->phone,
             'password' => Hash::make($request->password),
-            'positions_id' => $request->positions_id,
-            'photo' => $fullFilePath,
+            'positions_id' => $request->position,
+            'photo' => $path,
         ]);
+
+        User::copressImg($fullFilePath);
+
         return back()->withStatus(__('Server successfully create.'));
     }
 }

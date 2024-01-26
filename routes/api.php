@@ -16,9 +16,9 @@ use App\Http\Controllers\PositionController;
 |
 */
 Route::prefix('v1')->group(function () {
+    Route::get('users', [UserController::class, 'index']);
+    Route::post('users', [UserController::class, 'create']);
     Route::get('/user/{id}', [UserController::class, 'show']);
-    Route::get('user', [UserController::class, 'index']);
-    Route::post('user', [UserController::class, 'create']);
     Route::get('/positions', [PositionController::class, 'index']);
     Route::get('/tokens', [UserController::class, 'token']);
 });
