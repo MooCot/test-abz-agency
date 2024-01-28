@@ -33,6 +33,9 @@
                     <th class="table__text-name ">Name</th>
                     <th class="table__text-email admins-text-email">E-mail</th>
                     <th class="table__text-edit">phone</th>
+                    <th class="table__text-edit">position</th>
+                    <th class="table__text-edit">registration_timestamp</th>
+                    <th class="table__text-edit">photo</th>
                     <th class="table__text-edit"></th>
                 </tr>
             </thead>
@@ -43,6 +46,9 @@
                     <td class="table__tbody-namesur">{{ $user->name }}</td>
                     <td class="">{{ $user->email }}</td>
                     <td class="">{{ $user->phone }}</td>
+                    <td class="">{{ $user->position->name }}</td>
+                    <td class="">{{ $user->created_at }}</td>
+                    <td class="">{{ $user->photo }}</td>
                 </tr>
                 @endforeach
             </tbody>
@@ -66,8 +72,15 @@
                     var nameCell = document.createElement('td');
                     var emailCell = document.createElement('td');
                     var phoneCell = document.createElement('td');
+                    var positionCell = document.createElement('td');
+                    var createdCell = document.createElement('td');
+                    var photoCell = document.createElement('td');
 
                     row.classList.add('table__border-top');
+                    idCell.classList.add('table__text-center');
+                    idCell.classList.add('table__text-center');
+                    idCell.classList.add('table__text-center');
+                    idCell.classList.add('table__text-center');
                     idCell.classList.add('table__text-center');
                     nameCell.classList.add('table__tbody-namesur');
 
@@ -75,11 +88,17 @@
                     nameCell.textContent = user.name;
                     emailCell.textContent = user.email;
                     phoneCell.textContent = user.phone;
+                    positionCell.textContent = user.position;
+                    createdCell.textContent = user.registration_timestamp;
+                    photoCell.textContent = user.photo;
 
                     row.appendChild(idCell);
                     row.appendChild(nameCell);
                     row.appendChild(emailCell);
                     row.appendChild(phoneCell);
+                    row.appendChild(positionCell);
+                    row.appendChild(createdCell);
+                    row.appendChild(photoCell);
 
                     tableBody.appendChild(row);
                 });

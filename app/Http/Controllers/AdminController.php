@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use App\Models\Position;
 use App\Http\Requests\AdminUserRequest;
+use App\Http\Resources\UserResource;
 
 class AdminController extends Controller
 {
@@ -15,7 +16,7 @@ class AdminController extends Controller
     {
         $countUser = 6;
         return view('welcome', [
-            'users' => User::paginate($countUser),
+            'users' => UserResource::collection(User::paginate($countUser)->items()),
         ]);
     }
 
@@ -25,7 +26,7 @@ class AdminController extends Controller
 
         $users = User::skip($offset)->take(6)->get();
 
-        return response()->json(['users' => $users]);
+        return response()->json(['users' => UserResource::collection($users)]);
     }
 
     public function create()
