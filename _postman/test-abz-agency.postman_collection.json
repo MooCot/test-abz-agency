@@ -1,0 +1,172 @@
+{
+	"info": {
+		"_postman_id": "7fd3efcf-624b-482c-9a57-f64063b7c429",
+		"name": "test-abz-agency",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "32316011"
+	},
+	"item": [
+		{
+			"name": "user",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localURL}}/api/v1/user/1",
+					"host": [
+						"{{localURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"user",
+						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "users",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localURL}}/api/v1/users?page=2",
+					"host": [
+						"{{localURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users"
+					],
+					"query": [
+						{
+							"key": "page",
+							"value": "2"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "users",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Token",
+						"value": "05994e6662926518e700e30dbd1bdc24f2c4f0b41e35bf671a341ae5fa228138",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "test",
+							"type": "text"
+						},
+						{
+							"key": "email",
+							"value": "asdfa.mohr@example.org",
+							"type": "text"
+						},
+						{
+							"key": "phone",
+							"value": "+380531432243",
+							"type": "text"
+						},
+						{
+							"key": "positions_id",
+							"value": "1",
+							"type": "text"
+						},
+						{
+							"key": "password",
+							"value": "asdfasdf",
+							"type": "text"
+						},
+						{
+							"key": "photo",
+							"type": "file",
+							"src": "postman-cloud:///1eebc55e-437f-4aa0-841e-3456d747a123"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{localURL}}/api/v1/users",
+					"host": [
+						"{{localURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "photo",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localURL}}/storage/photos/7WJ04F8MqpvuGmhINYvUWtUe9WSANTXds4hDpx2w.jpg",
+					"host": [
+						"{{localURL}}"
+					],
+					"path": [
+						"storage",
+						"photos",
+						"7WJ04F8MqpvuGmhINYvUWtUe9WSANTXds4hDpx2w.jpg"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "positions",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localURL}}/api/v1/positions",
+					"host": [
+						"{{localURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"positions"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "tokens",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{localURL}}/api/v1/tokens",
+					"host": [
+						"{{localURL}}"
+					],
+					"path": [
+						"api",
+						"v1",
+						"tokens"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
