@@ -86,7 +86,7 @@ class UserController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => $e->getMessage()
-            ], (int)$e->getCode());
+            ], JsonResponse::HTTP_NOT_FOUND);
         }
     }
 
@@ -106,7 +106,7 @@ class UserController extends Controller
             return response()->json([
                 "success" => false,
                 "message" => "The user with the requested identifier does not exist",
-                $e->getMessage()
+                "fails" => ["user_id" => ["User not found"]]
             ], JsonResponse::HTTP_NOT_FOUND);
         } catch (ValidationException $e) {
             return response()->json([
@@ -122,7 +122,7 @@ class UserController extends Controller
         }
     }
 
-    public function token(Request $request)
+    public function token()
     {
         try {
             $toketnString = hash('sha256', Str::random(60));

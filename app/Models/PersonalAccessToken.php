@@ -21,12 +21,15 @@ class PersonalAccessToken extends SanctumPersonalAccessToken
         $token = self::where('token', $tokenString)->first();
         $now = Carbon::now();
         $expirationMinutes = config('sanctum.expiration');
-        $elapsedMinutes = $now->diffInMinutes(Carbon::parse($token->created_at));
-
-        if ($elapsedMinutes >= $expirationMinutes || empty($token)) {
+        if (empty($token)) {
             return true;
         }
-        // $token->delete();
+        $created = $token->created_at;
+        $token->delete();
+        $elapsedMinutes = $now->diffInMinutes(Carbon::parse($created));
+        if ($elapsedMinutes >= $expirationMinutes) {
+            return true;
+        }
         return false;
     }
 }
