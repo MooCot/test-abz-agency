@@ -53,6 +53,30 @@ class User extends Authenticatable
         return $this->hasOne(Position::class, 'id');
     }
 
+    public static function img($fullFilePath)
+    {
+        $image = imagecreatefromjpeg($fullFilePath);
+
+        $sourceWidth = imagesx($image);
+        $sourceHeight = imagesy($image);
+
+        $targetWidth = 70;
+        $targetHeight = 70;
+
+        $sourceX = max(0, ($sourceWidth - $targetWidth) / 2);
+        $sourceY = max(0, ($sourceHeight - $targetHeight) / 2);
+
+        $croppedImage = imagecreatetruecolor($targetWidth, $targetHeight);
+
+        imagecopyresampled($croppedImage, $image, 0, 0, $sourceX, $sourceY, $targetWidth, $targetHeight, $targetWidth, $targetHeight);
+
+        $outputFileName = $fullFilePath;
+        imagejpeg($croppedImage, $outputFileName, 70);
+
+        imagedestroy($image);
+        imagedestroy($croppedImage);
+    }
+
     public static function copressImg($fullFilePath)
     {
         $kay = config('app.api_tinify', 'Kay');
